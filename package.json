@@ -30,5 +30,8 @@
     "react-dom": "^18.1.0",
     "react-helmet": "^6.1.0",
     "typescript": "^4.6.4"
+  },
+  "devDependencies": {
+    "@codehelios/verify-tokenid": "^0.3.1"
   }
 }
