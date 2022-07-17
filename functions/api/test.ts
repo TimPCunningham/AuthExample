@@ -6,6 +6,5 @@ export async function onRequest(context): Promise<Response> {
   } = context;
 
   console.log("test worker");
-
-  return new Response("Hello, world!");
+  return new Response(JSON.stringify({message: "Hello World!"}));
 }

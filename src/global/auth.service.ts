@@ -1,4 +1,3 @@
-import firebase from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 export function googleLogin(): void {
@@ -7,19 +6,22 @@ export function googleLogin(): void {
 
   signInWithPopup(auth, provider)
     .then((result) => {
-      const user = result.user;
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential?.accessToken;
-
       auth.currentUser?.getIdToken(/* forceRefresh */ true).then(function(idToken) {
-        fetch("/api/authorize", {
+        console.log(idToken);
+        fetch("/auth/validate", {
           method: "POST",
-          mode: "cors",
           headers: {
+            "Accept": "application/json",
             "Content-Type": "application/json"
           },
           body: JSON.stringify({token: idToken})
-        }).then(res => res.json()).then(json => console.log("RESULT", json)).catch(err => console.error(err));
+        }).then(res => res.json()).then(json => {
+          if(json.token) {
+            window.localStorage.setItem("test_auth_token", json.token);
+          } else if(json.error) {
+            console.error(json.error);
+          }
+        }).catch(err => console.error(err));
       }).catch(function(error) {
         console.log(error);
       });
